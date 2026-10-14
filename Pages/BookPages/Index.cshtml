@@ -1,0 +1,55 @@
+@page
+@model Bolocan_Izabela_Lab2.Pages.BookPages.IndexModel
+
+@{
+    ViewData["Title"] = "Cărți";
+}
+
+<h1>Cărți</h1>
+
+<p>
+    <a asp-page="Create">Adaugă o carte</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Titlu</th>
+            <th>Autor</th>
+            <th>Preț</th>
+            <th>Data publicării</th>
+            <th>Editură</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Book)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @(item.Author != null
+                        ? item.Author.FirstName + " " + item.Author.LastName
+                        : "Nespecificat")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublishingDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Publisher.PublisherName)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.ID">Editează</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ID">Detalii</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ID">Șterge</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+```
