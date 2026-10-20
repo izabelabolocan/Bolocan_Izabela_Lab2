@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ namespace Bolocan_Izabela_Lab2.Pages.BookPages;
 public class DetailsModel : PageModel
 {
     private readonly Bolocan_Izabela_Lab2Context _context;
+
     public DetailsModel(Bolocan_Izabela_Lab2Context context)
     {
         _context = context;
@@ -23,17 +25,18 @@ public class DetailsModel : PageModel
         }
 
         var book = await _context.Book
-           .Include(b => b.Author)
-           .Include(b => b.Publisher)
-           .FirstOrDefaultAsync(m => m.ID == id);
+            .Include(b => b.Author)
+            .Include(b => b.Publisher)
+            .Include(b => b.BookCategories)
+                .ThenInclude(b => b.Category)
+            .FirstOrDefaultAsync(m => m.ID == id);
+
         if (book is null)
         {
             return NotFound();
         }
-        else
-        {
-            Book = book;
-        }
+
+        Book = book;
 
         return Page();
     }

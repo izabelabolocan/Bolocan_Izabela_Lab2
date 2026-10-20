@@ -1,4 +1,4 @@
-@page
+@page "/"
 @model Bolocan_Izabela_Lab2.Pages.BookPages.IndexModel
 
 @{
@@ -8,7 +8,7 @@
 <h1>Cărți</h1>
 
 <p>
-    <a asp-page="Create">Adaugă o carte</a>
+    <a asp-page="./Create">Adaugă o carte</a>
 </p>
 
 <table class="table">
@@ -19,15 +19,26 @@
             <th>Preț</th>
             <th>Data publicării</th>
             <th>Editură</th>
+            <th>Categorii</th>
             <th></th>
         </tr>
     </thead>
+
     <tbody>
-        @foreach (var item in Model.Book)
+        @foreach (var item in Model.BookD.Books)
         {
-            <tr>
+            string selectedRow = "";
+
+            if (item.ID == Model.BookID)
+            {
+                selectedRow = "table-success";
+            }
+
+            <tr class="@selectedRow">
                 <td>
-                    @Html.DisplayFor(modelItem => item.Title)
+                    <a asp-page="./Index" asp-route-id="@item.ID">
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </a>
                 </td>
                 <td>
                     @(item.Author != null
@@ -44,6 +55,13 @@
                     @Html.DisplayFor(modelItem => item.Publisher.PublisherName)
                 </td>
                 <td>
+                    @foreach (var category in item.BookCategories)
+                    {
+                        @category.Category.CategoryName
+                        <br />
+                    }
+                </td>
+                <td>
                     <a asp-page="./Edit" asp-route-id="@item.ID">Editează</a> |
                     <a asp-page="./Details" asp-route-id="@item.ID">Detalii</a> |
                     <a asp-page="./Delete" asp-route-id="@item.ID">Șterge</a>
@@ -52,4 +70,16 @@
         }
     </tbody>
 </table>
-```
+
+@if (Model.BookD.Categories != null)
+{
+    <h3>Categoriile cărții selectate</h3>
+
+    @foreach (var category in Model.BookD.Categories)
+    {
+        <p>
+            @category.ID: @category.CategoryName
+        </p>
+    }
+}
+
